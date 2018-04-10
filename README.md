@@ -95,13 +95,39 @@ void XuatSV(SV *sv,int sosv)
 		printf("%s %s %s %s %s %s %s %s %s\n", &sv[i].MSSV, &sv[i].Ten, &sv[i].Khoa, &sv[i].NienKhoa, &sv[i].Ngaysinh, &sv[i].Hinh, &sv[i].Mota, &sv[i].Sothichnhac, &sv[i].Sothichdienanh);
 	}
 }
+void SaoChepFile(FILE *filenguon,FILE *filexuat)
+{
+	char temp[256];
+	while (!feof(filenguon))
+	{
+		fgets(temp, 255,filenguon);
+		fputs(temp, filexuat);
+	}
+}
+void SuaFile(FILE *fp, SV sv)
+{
+	char temp[30];
+	while (!feof(fp))
+	{
+		fgets(temp, 8, fp);
+		if (temp == "<title>")
+		{
+			printf("Vi tri con tro: %d", ftell(fp));
+			fputs(sv.Ten, fp);
+			printf("Vi tri con tro: %d", ftell(fp));
+			break;
+		}
+	}
+}
 void main()
 {
-	FILE *fp;
+	FILE *fp,*fpout,*fpin;
 	SV *sv = NULL;
 	int sosv=0;
 	fopen_s(&fp,"sinhvien.txt", "r");
-	if (fp==NULL)
+	fopen_s(&fpin, "sinhvien.htm", "r");
+	fopen_s(&fpout, "sinhvienout.htm", "r+");
+	if (!fp||!fpin)
 		printf("Khong mo duoc tap tin\n");
 	else
 	{
@@ -111,12 +137,14 @@ void main()
 		fgets(dong, 255, fp);
 		if (strlen(dong) < 255)
 			dong[strlen(dong)-1] = '\0';
-		Doc1SV(dong, a);
+		Doc1SV(dong, a);S
 		printf("%s\n",a.MSSV);
 		*/
 		DocAllFile(fp, sv, sosv);
 		XuatSV( sv, sosv);
+		SuaFile(fpout, sv[0]);
 		fclose(fp);
-
+		fclose(fpin);
+		fclose(fpout);
 	}
 }
