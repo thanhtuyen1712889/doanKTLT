@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <malloc.h>
+#include <string.h>
+#include <conio.h>
 struct SINHVIEN
 {
 	char MSSV[11];
@@ -11,15 +14,15 @@ struct SINHVIEN
 	char Sothichnhac[200];
 	char Sothichdienanh[200];
 }; typedef struct SINHVIEN SV;
+//Ham sao chep chuoi bo ky tu cuoi va dau
 char* StringCopy(char* dich, char* nguon)
 {
 	int n = strlen(nguon);
-	//dich = new char[n];
-	for (int i = 0; i<n; i++)
+	for (int i = 1; i < n; i++)
 	{
-		dich[i] = nguon[i];
+		dich[i-1] = nguon[i];
 	}
-	dich[n] = '\0';
+	dich[n-2] = '\0';
 	return dich;
 }
 void Doc1SV(char *dong, SV &sv)
@@ -28,7 +31,7 @@ void Doc1SV(char *dong, SV &sv)
 	int n=strlen(dong);
 	for (int i = n-1; i > 0; i--)
 	{
-		if (dong[i] == ',')
+		if (dong[i] == ','&& dong[i-1]=='"')
 		{
 			switch (k)
 			{
@@ -51,10 +54,10 @@ void Doc1SV(char *dong, SV &sv)
 				StringCopy(sv.NienKhoa, dong + i +1);
 				break;
 			case 6:
-				StringCopy(sv.Khoa, dong + i + 1);
+				StringCopy(sv.Khoa, dong + i +1);
 				break;
 			case 7:
-				StringCopy(sv.Ten, dong + i + 1);
+				StringCopy(sv.Ten, dong + i +1);
 				break;
 			}
 			dong[i] = '\0';
@@ -102,6 +105,15 @@ void main()
 		printf("Khong mo duoc tap tin\n");
 	else
 	{
+		/*
+		SV a;
+		char dong[255];
+		fgets(dong, 255, fp);
+		if (strlen(dong) < 255)
+			dong[strlen(dong)-1] = '\0';
+		Doc1SV(dong, a);
+		printf("%s\n",a.MSSV);
+		*/
 		DocAllFile(fp, sv, sosv);
 		XuatSV( sv, sosv);
 		fclose(fp);
