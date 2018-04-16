@@ -82,8 +82,8 @@ void DocAllFile(FILE *fp, SV * &sv, int &sosv)
 		if (sv != NULL)
 		{
 			fgets(dong, 255, fp);
-			if (strlen(dong) < 255)
-				dong[strlen(dong)] = '\0';
+			if (dong[strlen(dong)-1] =='\n')
+				dong[strlen(dong)-1] = '\0';
 			Doc1SV(dong, sv[sosv - 1]);
 		}
 	}
@@ -166,14 +166,14 @@ void SuaFile(FILE *&fp, SV sv)
 			}
 			case 8:
 			{
-				
+
 				fseek(fp, -1L, SEEK_CUR);
 				fputs(sv.Sothichnhac, fp);
 				break;
 			}
 			case 9:
 			{
-				
+
 				fseek(fp, -1L, SEEK_CUR);
 				fputs(sv.Sothichdienanh, fp);
 				break;
@@ -187,39 +187,44 @@ void SuaFile(FILE *&fp, SV sv)
 			}
 			k++;
 			contro = ftell(fp);
-			fseek(fp, contro, SEEK_SET);
+			fseek(fp, contro+1, SEEK_SET);
 		}
 	}
 }
-
 void main()
 {
-	FILE *fp, *fpout, *fpin;
+	FILE *fp, *fpin,*fpout;
 	SV *sv = NULL;
-	int sosv = 0;
-	fopen_s(&fp, "sinhvien.txt", "r");
+	char s[20];
+	int sosv;
+	fopen_s(&fp, "checklist.txt", "r");
 	fopen_s(&fpin, "sinhvien.htm", "r");
-	fopen_s(&fpout, "sinhvienout.htm", "w+");
 	if (!fp || !fpin)
 		printf("Khong mo duoc tap tin\n");
 	else
 	{
-		/*
-		SV a;
-		char dong[255];
-		fgets(dong, 255, fp);
-		if (strlen(dong) < 255)
-		dong[strlen(dong)-1] = '\0';
-		Doc1SV(dong, a);S
-		printf("%s\n",a.MSSV);
-		*/
+		
 		DocAllFile(fp, sv, sosv);
 		XuatSV(sv, sosv);
-		SaoChepFile(fpin, fpout);
-		rewind(fpout);
-		SuaFile(fpout, sv[0]);
+		for (int i = 0; i < sosv; i++)
+		{
+		
+			strcpy_s(s, sv[i].MSSV);
+			strcat_s(s, ".htm");
+			fopen_s(&fpout, s, "w+");
+			if (fpout!=NULL)
+			{
+				SaoChepFile(fpin, fpout);
+				rewind(fpout);
+				SuaFile(fpout, sv[i]);
+				fclose(fpout);
+				rewind(fpin);
+			}
+			else printf("Khong mo duoc file %s", s);
+		}
+		
 		fclose(fp);
 		fclose(fpin);
-		fclose(fpout);
+		
 	}
 }
