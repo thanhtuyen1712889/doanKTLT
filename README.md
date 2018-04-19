@@ -126,18 +126,23 @@ if (ch == L'*')
 switch (k)
 {
 case 0:
+case 4:
 {
-fseek(fp, -1L, SEEK_CUR);
+	
+	fseek(fp, -1L, SEEK_CUR);
 fputws(sv.Ten, fp);
 break;
 }
 case 1:
+case 5:
 {
 fseek(fp, -1L, SEEK_CUR);
 fputws(sv.MSSV, fp);
 break;
+
 }
 case 2:
+case 6:
 {
 fseek(fp, -1L, SEEK_CUR);
 fputws(sv.Khoa, fp);
@@ -149,24 +154,8 @@ fseek(fp, -1L, SEEK_CUR);
 fputws(sv.Hinh, fp);
 break;
 }
-case 4:
-{
-fseek(fp, -1L, SEEK_CUR);
-fputws(sv.Ten, fp);
-break;
-}
-case 5:
-{
-fseek(fp, -1L, SEEK_CUR);
-fputws(sv.MSSV, fp);
-break;
-}
-case 6:
-{
-fseek(fp, -1L, SEEK_CUR);
-fputws(sv.Khoa, fp);
-break;
-}
+
+
 case 7:
 {
 fseek(fp, -1L, SEEK_CUR);
@@ -239,7 +228,6 @@ int main()
 	fclose(fp);
 	fclose(fpin);
 	} 
-	
-	
+	return 0;
 	
 }
