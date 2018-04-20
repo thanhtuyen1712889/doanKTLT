@@ -16,49 +16,63 @@ struct SINHVIEN
 	wchar_t Ngaysinh[11];
 	wchar_t Hinh[20];
 	wchar_t Mota[1000];
-	wchar_t Sothich[1000];
+	wchar_t Sothich[10][256];
 }; typedef struct SINHVIEN SV;
 
 //Ham sao chep chuoi bo ky tu cuoi va dau
 
-wchar_t* StringCopy(wchar_t* dich, wchar_t* nguon)
+void DocSoThich(wchar_t *context, SV &sv, int &n)
 {
-
-	int n = wcslen(nguon);
-	for (int i = 1; i < n; i++)
+	wchar_t a[2] = { '"','\0' };
+	wchar_t *Sothich = NULL;
+	n = 0;
+	while (1)
 	{
-		dich[i - 1] = nguon[i];
+		n++;
+		if (*context == '"')
+		{
+			Sothich = wcstok_s(context + 1, a, &context);
+			
+			if (*(context+1) == '"')
+				context++;
+		}
+		else  
+			Sothich = wcstok_s(context, L",", &context);
+		if (Sothich == NULL)
+		{
+			n--;
+			break;
+		}
+		wcscpy_s(sv.Sothich[n-1], Sothich);
 	}
-	dich[n - 2] = '\0';
-	return dich;
 }
-void Doc1SV(wchar_t *dong, SV &sv)
+
+void Doc1SV(wchar_t *dong, SV &sv,int &soSothich)
 {
-	wchar_t *MSSV;
-	wchar_t *Ten;
-	wchar_t *Khoa;
-	wchar_t *NienKhoa;
-	wchar_t *Ngaysinh;
-	wchar_t *Hinh;
-	wchar_t *Mota;
-	wchar_t *Sothich;
+	wchar_t *MSSV=NULL;
+	wchar_t *Ten=NULL;
+	wchar_t *Khoa = NULL;
+	wchar_t *NienKhoa = NULL;
+	wchar_t *Ngaysinh = NULL;
+	wchar_t *Hinh = NULL;
+	wchar_t *Mota = NULL;
 	wchar_t a[2] = { '"','\0' };
 	wchar_t *context = dong;
-	MSSV=wcstok_s(context, L",", &context);
-	Ten=wcstok_s(context, L",", &context);
-	Khoa= wcstok_s(context, L",", &context);
-	NienKhoa= wcstok_s(context, L",", &context);
+	MSSV = wcstok_s(context, L",", &context);
+	Ten = wcstok_s(context, L",", &context);
+	Khoa = wcstok_s(context, L",", &context);
+	NienKhoa = wcstok_s(context, L",", &context);
 	Ngaysinh = wcstok_s(context, L",", &context);
 	Hinh = wcstok_s(context, L",", &context);
 	if (context[0] == L'"')
 	{
-		Mota = wcstok_s(context+1, a, &context);
-		Sothich = context + 1;
+		Mota = wcstok_s(context + 1, a, &context);
+		if (*(context + 1) == '"')
+			context++;
 	}
 	else
 	{
 		Mota = wcstok_s(context, L",", &context);
-		Sothich = context;
 	}
 	wcscpy_s(sv.MSSV, MSSV);
 	wcscpy_s(sv.Ten, Ten);
@@ -67,10 +81,10 @@ void Doc1SV(wchar_t *dong, SV &sv)
 	wcscpy_s(sv.Ngaysinh, Ngaysinh);
 	wcscpy_s(sv.Hinh, Hinh);
 	wcscpy_s(sv.Mota, Mota);
-	wcscpy_s(sv.Sothich, Sothich);
+	DocSoThich(context, sv, soSothich);
 }
 
-void DocAllFile(FILE *fp, SV * &sv, int &sosv)
+void DocAllFile(FILE *fp, SV * &sv, int &sosv,int * &soSothich)
 {
 	sosv = 0;
 	sv = NULL;
@@ -79,21 +93,37 @@ void DocAllFile(FILE *fp, SV * &sv, int &sosv)
 	{
 		sosv++;
 		sv = (SV*)realloc(sv, sosv * sizeof(SV));
+		soSothich = (int*)realloc(soSothich, sosv * sizeof(int));
 		if (sv != NULL)
 		{
 			fgetws(dong, 255, fp);
 			if (dong[wcslen(dong) - 1] == '\n')
 				dong[wcslen(dong) - 1] = '\0';
-			Doc1SV(dong, *(sv+sosv-1));
+			Doc1SV(dong, *(sv + sosv - 1),soSothich[sosv-1]);
 		}
 	}
 }
-void XuatSV(SV *sv, int sosv)
+void XuatSV(SV *sv, int sosv,int *soSothich)
 {
 	for (int i = 0; i < sosv; i++)
 	{
-		wprintf(L"%s %s %s %s %s %s %s %s\n", sv[i].MSSV, sv[i].Ten, sv[i].Khoa, sv[i].NienKhoa, sv[i].Ngaysinh, sv[i].Hinh, sv[i].Mota, sv[i].Sothich);
+		wprintf(L"\t-----Thông tin của sinh viên-----\n");
+		wprintf(L"MSSV:     %s\n", sv[i].MSSV);
+		wprintf(L"Họ và tên:    %s\n", sv[i].Ten);
+		wprintf(L"Khoa:     %s\n", sv[i].Khoa);
+		wprintf(L"Khóa học:   %s\n", sv[i].NienKhoa);
+		wprintf(L"Ngày tháng năm sinh:   %s\n", sv[i].Ngaysinh);
+		wprintf(L"Địa chỉ hình:   %s\n", sv[i].Hinh);
+		wprintf(L"Mô tả bản thân:   %s\n", sv[i].Mota);
+		wprintf(L"Sở thích: \n");
+		for (int j = 0; j < soSothich[i]; j++)
+		{
+			wprintf(L"    %s\n", sv[i].Sothich[j]);
+		}
+		wprintf(L"\n\n");
 	}
+
+	
 }
 void SaoChepFile(FILE *filenguon, FILE *filexuat)
 {
@@ -104,6 +134,7 @@ void SaoChepFile(FILE *filenguon, FILE *filexuat)
 		fputws(temp, filexuat);
 	}
 }
+/*
 void SuaFile(FILE *&fp, SV sv)
 {
 	long contro;
@@ -134,7 +165,7 @@ void SuaFile(FILE *&fp, SV sv)
 			}
 			case 2:
 			{
-				
+
 				fseek(fp, -1L, SEEK_CUR);
 				fputws(sv.Khoa, fp);
 				break;
@@ -169,9 +200,9 @@ void SuaFile(FILE *&fp, SV sv)
 			//case 9:
 			//{
 
-				//fseek(fp, -1L, SEEK_CUR);
-				//fputws(sv.Sothichdienanh, fp);
-				//break;
+			//fseek(fp, -1L, SEEK_CUR);
+			//fputws(sv.Sothichdienanh, fp);
+			//break;
 			//}
 			case 9:
 			{
@@ -186,7 +217,7 @@ void SuaFile(FILE *&fp, SV sv)
 		}
 	}
 }
-
+*/
 int main()
 {
 
@@ -196,35 +227,38 @@ int main()
 	SV *sv = NULL;
 	wchar_t s[20];
 	int sosv;
+	int *soSothich = NULL;
 	_wfopen_s(&fp, L"checklist1.txt", L"r,ccs=UTF-8");
 	fopen_s(&fpin, "sinhvien.htm", "r,ccs=UTF-8");
-	
+
 	if (!fp || !fpin)
 		printf("Khong mo duoc tap tin\n");
 	else
 	{
-		DocAllFile(fp, sv, sosv);
-		XuatSV(sv, sosv);
+		DocAllFile(fp, sv, sosv,soSothich);
+		//wprintf(L"%s", sv[1].Sothich[0]);
+		XuatSV(sv, sosv,soSothich);
+		wprintf(L"%d", soSothich[0]);
 	}
-		for (int i = 0; i < sosv; i++)
+	/*for (int i = 0; i < sosv; i++)
+	{
+		wcscpy_s(s, sv[i].MSSV);
+		wcscat_s(s, L".htm");
+		_wfopen_s(&fpout, s, L"w+,ccs=UTF-8");
+		if (fpout != NULL)
 		{
-			wcscpy_s(s, sv[i].MSSV);
-			wcscat_s(s, L".htm");
-			_wfopen_s(&fpout, s, L"w+,ccs=UTF-8");
-			if (fpout != NULL)
-			{
-				SaoChepFile(fpin, fpout);
-				rewind(fpout);
-				SuaFile(fpout, sv[i]);
-				fclose(fpout);
-				rewind(fpin);
-			}
-			else printf("Khong mo duoc file %s", s);
+			SaoChepFile(fpin, fpout);
+			rewind(fpout);
+			//SuaFile(fpout, sv[i]);
+			fclose(fpout);
+			rewind(fpin);
 		}
+		else printf("Khong mo duoc file %s", s);
+	}
 
-		fclose(fp);
-		fclose(fpin);
-	
+	fclose(fp);
+	fclose(fpin);
+	*/
 	return 0;
-	
+
 }
