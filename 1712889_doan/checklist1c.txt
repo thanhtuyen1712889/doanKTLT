@@ -1,0 +1,10 @@
+﻿1712889,Lê Thị Thanh Tuyền,Công nghệ thông tin,2017,10/07/99,1712889.jpg,"Ít nói, hướng nội",Âm nhạc: Vpop,Điện ảnh: Doraemon,,
+1712890,Nguyễn Thị Thanh Tuyền,Công nghệ thông tin,2017,22/06/1999,1712890.jpg,"Vui vẻ, vô tư",Âm nhạc: Sơn Tùng,Điện ảnh: Hoạt hình Conan,,
+1713850,Lê Thị Thanh Hương,Vật Lý,2017,12/06/99,1713850.jpg,"Hòa đồng, vui vẻ",Âm nhạc: Mây và núi,Điện ảnh: Phim Hàn,Thích vẽ,
+1614009,Phùng Lê Bằng,Hóa Học,2016,20/12/1998,1614009.jpg,Dễ gần,Âm nhạc: Rap,Thích nhảy,Tham gia các hoạt động tình nguyện,
+1714803,Nguyễn Lâm Thiên Hương,Hóa Học,2017,30/10/1999,1714803.jpg,"Lanh lẹ, vui tính",Điện ảnh: Phim Trung Quốc,,,
+1712095,Đỗ Hoàng Minh,Công nghệ thông tin,2017,06/04/99,1712095.jpg,"Trầm tính, ít nói",Thích code,Thần tượng: Steve Jobs,,
+1712746,Nguyễn Minh Tâm,Công nghệ thông tin,2017,30/05/1999,1712746.jpg,"Thân thiện, hòa đồng",,,,
+1712895,Lê Thị Ngọc Thảo,Công nghệ thông tin,2017,20/12/1999,1712895.jpg,"Hòa đồng, vui vẻ",Âm nhạc: Bolero,Điện ảnh: Phim Ma,,
+1711350,Trần Ngọc Hải Yến,Toán ,2017,20/01/1999,1711350.jpg,"Nói nhiều, dễ gần","Nghe nhạc, xem phim",,,
+1712894,Đặng Thị Thúy Uyên,Công nghệ thông tin,2017,08/01/99,1712894.jpg,"Hòa đồng, dễ gần",Âm nhạc: Vpop,"Điện ảnh: Harry Potter, phim tình cảm",Thích nhảy,Dạo chơi cùng bạn bè
