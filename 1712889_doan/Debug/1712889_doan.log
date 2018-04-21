@@ -1,0 +1,8 @@
+﻿  1712889.cpp
+d:\ktlt\1712889_doan\1712889_doan\1712889.cpp(271): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'wchar_t *'
+  d:\ktlt\1712889_doan\1712889_doan\1712889.cpp(271): note: consider using '%ls' in the format string
+  d:\ktlt\1712889_doan\1712889_doan\1712889.cpp(271): note: consider using '%lls' in the format string
+  d:\ktlt\1712889_doan\1712889_doan\1712889.cpp(271): note: consider using '%Ls' in the format string
+  d:\ktlt\1712889_doan\1712889_doan\1712889.cpp(271): note: consider using '%ws' in the format string
+  1712889_doan.vcxproj -> D:\KTLT\1712889_doan\Debug\1712889.exe
+  1712889_doan.vcxproj -> D:\KTLT\1712889_doan\Debug\1712889.pdb (Full PDB)
