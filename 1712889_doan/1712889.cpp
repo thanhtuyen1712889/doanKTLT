@@ -17,10 +17,38 @@ struct SINHVIEN
 	wchar_t Hinh[20];
 	wchar_t Mota[1000];
 	wchar_t Sothich[10][256];
+	wchar_t Email[31];
 }; typedef struct SINHVIEN SV;
 
 //Ham sao chep chuoi bo ky tu cuoi va dau
 
+void TimEmail(wchar_t * &context, SV &sv)
+{
+	wchar_t *x = NULL;
+	wchar_t *x1 = NULL;
+	wchar_t *temp = NULL;
+	x = wcsstr(context, L"Email");
+	if (x == NULL)
+	{
+		*sv.Email = '\0';
+		return;
+	}
+		
+	else
+	{
+		temp = wcstok_s(x, L",",&x);
+		wcscpy_s(sv.Email, temp);
+		if (*x =='\0')
+		{
+			*temp = '\0';
+		}
+		else
+		{
+			context = x;
+		}
+		
+	}
+}
 void DocSoThich(wchar_t *context, SV &sv, int &n)
 {
 	wchar_t a[2] = { '"','\0' };
@@ -74,6 +102,7 @@ void Doc1SV(wchar_t *dong, SV &sv, int &soSothich)
 	{
 		Mota = wcstok_s(context, L",", &context);
 	}
+	
 	wcscpy_s(sv.MSSV, MSSV);
 	wcscpy_s(sv.Ten, Ten);
 	wcscpy_s(sv.Khoa, Khoa);
@@ -81,6 +110,7 @@ void Doc1SV(wchar_t *dong, SV &sv, int &soSothich)
 	wcscpy_s(sv.Ngaysinh, Ngaysinh);
 	wcscpy_s(sv.Hinh, Hinh);
 	wcscpy_s(sv.Mota, Mota);
+	TimEmail(context, sv);
 	DocSoThich(context, sv, soSothich);
 }
 
@@ -119,6 +149,7 @@ void XuatSV(SV *sv, int sosv, int *soSothich)
 		wprintf(L"MSSV:     %s\n", sv[i].MSSV);
 		wprintf(L"Họ và tên:    %s\n", sv[i].Ten);
 		wprintf(L"Khoa:     %s\n", sv[i].Khoa);
+		wprintf(L"%s\n", sv[i].Email);
 		wprintf(L"Khóa học:   %s\n", sv[i].NienKhoa);
 		wprintf(L"Ngày tháng năm sinh:   %s\n", sv[i].Ngaysinh);
 		wprintf(L"Địa chỉ hình:   %s\n", sv[i].Hinh);
@@ -156,7 +187,7 @@ void SuaFile(FILE *&fp, SV sv, int soSothich)
 			switch (k)
 			{
 			case 1:
-			case 5:
+			case 6:
 			{
 				fseek(fp, -1L, SEEK_CUR);
 				fputws(sv.Ten, fp);
@@ -164,7 +195,7 @@ void SuaFile(FILE *&fp, SV sv, int soSothich)
 			}
 			case 0:
 			case 2:
-			case 6:
+			case 7:
 			{
 				fseek(fp, -1L, SEEK_CUR);
 				fputws(sv.MSSV, fp);
@@ -178,24 +209,39 @@ void SuaFile(FILE *&fp, SV sv, int soSothich)
 			}
 			case 4:
 			{
+				if (wcslen(sv.Email)==0)
+				{
+					fseek(fp, -1L, SEEK_CUR);
+					fputwc(' ', fp);
+					break;
+				}
+				else
+				{
+					fseek(fp, -1L, SEEK_CUR);
+					fputws(sv.Email, fp);
+					break;
+				}
+			}
+			case 5:
+			{
 				fseek(fp, -1L, SEEK_CUR);
 				fputws(sv.Hinh, fp);
 				break;
 			}
-			case 7:
+			case 8:
 			{
 				fseek(fp, -1L, SEEK_CUR);
 				fputws(sv.Khoa, fp);
 				break;
 			}
 
-			case 8:
+			case 9:
 			{
 				fseek(fp, -1L, SEEK_CUR);
 				fputws(sv.Ngaysinh, fp);
 				break;
 			}
-			case 9:
+			case 10:
 			{
 				if (soSothich == 0)
 				{
@@ -215,7 +261,7 @@ void SuaFile(FILE *&fp, SV sv, int soSothich)
 					}
 				break;
 			}
-			case 10:
+			case 11:
 			{
 				fseek(fp, -1L, SEEK_CUR);
 				fputws(sv.Mota, fp);
@@ -255,7 +301,7 @@ int main()
 	{
 		wcscpy_s(s, sv[i].MSSV);
 		wcscat_s(s, L".htm");
-		_wfopen_s(&fpout, s, L"w+,ccs=UTF-8");
+		_wfopen_s(&fpout, s	, L"w+,ccs=UTF-8");
 		if (fpout != NULL)
 		{
 			SaoChepFile(fpin, fpout);
