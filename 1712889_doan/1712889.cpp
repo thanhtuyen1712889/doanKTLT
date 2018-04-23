@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <malloc.h>
 #include <string.h>
 #include <conio.h>
@@ -145,92 +145,88 @@ void SaoChepFile(FILE *filenguon, FILE *filexuat)
 
 void SuaFile(FILE *&fp, SV sv, int soSothich)
 {
-long contro;
-int k = 0;
-wchar_t ch;
-while (!feof(fp))
-{
-	ch = fgetwc(fp);
-if (ch == L'*')
-{
-switch (k)
-{
-case 1:
-case 5:
-{
-
-fseek(fp, -1L, SEEK_CUR);
-fputws(sv.Ten, fp);
-break;
-}
-case 0:
-case 2:
-case 6:
-{
-fseek(fp, -1L, SEEK_CUR);
-fputws(sv.MSSV, fp);
-break;
-
-}
-case 3:
-{
-
-fseek(fp, -1L, SEEK_CUR);
-fputws(sv.Khoa, fp);
-break;
-}
-
-case 4:
-{
-fseek(fp, -1L, SEEK_CUR);
-fputws(sv.Hinh, fp);
-break;
-}
-case 7:
-{
-fseek(fp, -1L, SEEK_CUR);
-fputws(sv.Khoa, fp);
-break;
-}
-
-case 8:
-{
-fseek(fp, -1L, SEEK_CUR);
-fputws(sv.Ngaysinh, fp);
-break;
-}
-case 9:
-{
-	if (soSothich == 0)
+	long contro;
+	int k = 0;
+	wchar_t ch;
+	while (!feof(fp))
 	{
-		fseek(fp, -5L, SEEK_CUR);
-		for (int i = 0; i < 5; i++)
-			fputwc(' ', fp);
-		break;
-	}
-	fseek(fp, -1L, SEEK_CUR);
-	fputws(sv.Sothich[0], fp);
+		ch = fgetwc(fp);
+		if (ch == L'*')
+		{
+			switch (k)
+			{
+			case 1:
+			case 5:
+			{
+				fseek(fp, -1L, SEEK_CUR);
+				fputws(sv.Ten, fp);
+				break;
+			}
+			case 0:
+			case 2:
+			case 6:
+			{
+				fseek(fp, -1L, SEEK_CUR);
+				fputws(sv.MSSV, fp);
+				break;
+			}
+			case 3:
+			{
+				fseek(fp, -1L, SEEK_CUR);
+				fputws(sv.Khoa, fp);
+				break;
+			}
+			case 4:
+			{
+				fseek(fp, -1L, SEEK_CUR);
+				fputws(sv.Hinh, fp);
+				break;
+			}
+			case 7:
+			{
+				fseek(fp, -1L, SEEK_CUR);
+				fputws(sv.Khoa, fp);
+				break;
+			}
+
+			case 8:
+			{
+				fseek(fp, -1L, SEEK_CUR);
+				fputws(sv.Ngaysinh, fp);
+				break;
+			}
+			case 9:
+			{
+				if (soSothich == 0)
+				{
+					fseek(fp, -5L, SEEK_CUR);
+					for (int i = 0; i < 5; i++)
+						fputwc(' ', fp);
+				break;
+				}
+				fseek(fp, -1L, SEEK_CUR);
+				fputws(sv.Sothich[0], fp);
 	
-	for (int i = 1; i < soSothich; i++)
-	{
-		fputws(L"\n<li> ",fp);
-		fputws(sv.Sothich[i], fp);
-		fputws(L"</li>", fp);
+				for (int i = 1; i < soSothich; i++)
+					{
+						fputws(L"\n<li> ",fp);
+						fputws(sv.Sothich[i], fp);
+						fputws(L"</li>", fp);
+					}
+				break;
+			}
+			case 10:
+			{
+				fseek(fp, -1L, SEEK_CUR);
+				fputws(sv.Mota, fp);
+				return;
+			}
+			}
+			k++;
+			contro = ftell(fp);
+			fseek(fp, contro + 1, SEEK_SET);
+		}
 	}
-	break;
-}
-case 10:
-{
-fseek(fp, -1L, SEEK_CUR);
-fputws(sv.Mota, fp);
-return;
-}
-}
-k++;
-contro = ftell(fp);
-fseek(fp, contro + 1, SEEK_SET);
-}
-}
 }
 
 int main()
@@ -257,18 +253,18 @@ int main()
 	}
 	for (int i = 0; i < sosv; i++)
 	{
-	wcscpy_s(s, sv[i].MSSV);
-	wcscat_s(s, L".htm");
-	_wfopen_s(&fpout, s, L"w+,ccs=UTF-8");
-	if (fpout != NULL)
-	{
-	SaoChepFile(fpin, fpout);
-	rewind(fpout);
-	SuaFile(fpout, sv[i],soSothich[i]);
-	fclose(fpout);
-	rewind(fpin);
-	}
-	else printf("Khong mo duoc file %s", s);
+		wcscpy_s(s, sv[i].MSSV);
+		wcscat_s(s, L".htm");
+		_wfopen_s(&fpout, s, L"w+,ccs=UTF-8");
+		if (fpout != NULL)
+		{
+			SaoChepFile(fpin, fpout);
+			rewind(fpout);
+			SuaFile(fpout, sv[i],soSothich[i]);
+			fclose(fpout);
+			rewind(fpin);
+		}
+		else printf("Khong mo duoc file %s", s);
 	}
 
 	fclose(fp);
