@@ -285,7 +285,7 @@ int main()
 	wchar_t s[20];
 	int sosv;
 	int *soSothich = NULL;
-	_wfopen_s(&fp, L"1.txt", L"r+,ccs=UTF-8");
+	_wfopen_s(&fp, L"checklist1.txt", L"r+,ccs=UTF-8");
 	fopen_s(&fpin, "sinhvien.htm", "r,ccs=UTF-8");
 
 	if (!fp || !fpin)
