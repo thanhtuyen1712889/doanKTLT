@@ -17,7 +17,7 @@ struct SINHVIEN
 	wchar_t Hinh[20];
 	wchar_t Mota[1000];
 	wchar_t Sothich[10][256];
-	wchar_t Email[31];
+	wchar_t Email[50];
 }; typedef struct SINHVIEN SV;
 
 //Ham sao chep chuoi bo ky tu cuoi va dau
@@ -285,7 +285,7 @@ int main()
 	wchar_t s[20];
 	int sosv;
 	int *soSothich = NULL;
-	_wfopen_s(&fp, L"checklist1.csv", L"r+,ccs=UTF-8");
+	_wfopen_s(&fp, L"1.txt", L"r+,ccs=UTF-8");
 	fopen_s(&fpin, "sinhvien.htm", "r,ccs=UTF-8");
 
 	if (!fp || !fpin)
