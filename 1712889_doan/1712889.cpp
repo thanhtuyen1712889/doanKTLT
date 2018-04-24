@@ -17,7 +17,7 @@ struct SINHVIEN
 	wchar_t Hinh[20];
 	wchar_t Mota[1000];
 	wchar_t Sothich[10][256];
-	wchar_t Email[50];
+	wchar_t Email[60];
 }; typedef struct SINHVIEN SV;
 
 //Ham sao chep chuoi bo ky tu cuoi va dau
