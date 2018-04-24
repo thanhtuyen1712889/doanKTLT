@@ -33,12 +33,12 @@ void TimEmail(wchar_t * &context, SV &sv)
 		*sv.Email = '\0';
 		return;
 	}
-		
+
 	else
 	{
-		temp = wcstok_s(x, L",",&x);
+		temp = wcstok_s(x, L",", &x);
 		wcscpy_s(sv.Email, temp);
-		if (*x =='\0')
+		if (*x == '\0' || (*x == ','&& *(x + 1) == '\0') || (*x == ',' && *(x + 1) == ','))
 		{
 			*temp = '\0';
 		}
@@ -46,7 +46,7 @@ void TimEmail(wchar_t * &context, SV &sv)
 		{
 			context = x;
 		}
-		
+
 	}
 }
 void DocSoThich(wchar_t *context, SV &sv, int &n)
@@ -57,7 +57,7 @@ void DocSoThich(wchar_t *context, SV &sv, int &n)
 	while (1)
 	{
 		n++;
-		
+
 		if (*context == L'"')
 		{
 			Sothich = wcstok_s(context + 1, a, &context);
@@ -96,13 +96,13 @@ void Doc1SV(wchar_t *dong, SV &sv, int &soSothich)
 	if (context[0] == L'"')
 	{
 		Mota = wcstok_s(context + 1, a, &context);
-			context++;
+		context++;
 	}
 	else
 	{
 		Mota = wcstok_s(context, L",", &context);
 	}
-	
+
 	wcscpy_s(sv.MSSV, MSSV);
 	wcscpy_s(sv.Ten, Ten);
 	wcscpy_s(sv.Khoa, Khoa);
@@ -132,7 +132,7 @@ void DocAllFile(FILE *&fp, SV * &sv, int &sosv, int * &soSothich)
 		sosv++;
 		sv = (SV*)realloc(sv, sosv * sizeof(SV));
 		soSothich = (int*)realloc(soSothich, sosv * sizeof(int));
-		if (sv != NULL && soSothich !=NULL)
+		if (sv != NULL && soSothich != NULL)
 		{
 			fgetws(dong, 255, fp);
 			if (dong[wcslen(dong) - 1] == '\n')
@@ -209,7 +209,7 @@ void SuaFile(FILE *&fp, SV sv, int soSothich)
 			}
 			case 4:
 			{
-				if (wcslen(sv.Email)==0)
+				if (wcslen(sv.Email) == 0)
 				{
 					fseek(fp, -1L, SEEK_CUR);
 					fputwc(' ', fp);
@@ -248,17 +248,17 @@ void SuaFile(FILE *&fp, SV sv, int soSothich)
 					fseek(fp, -5L, SEEK_CUR);
 					for (int i = 0; i < 5; i++)
 						fputwc(' ', fp);
-				break;
+					break;
 				}
 				fseek(fp, -1L, SEEK_CUR);
 				fputws(sv.Sothich[0], fp);
-	
+
 				for (int i = 1; i < soSothich; i++)
-					{
-						fputws(L"\n<li> ",fp);
-						fputws(sv.Sothich[i], fp);
-						fputws(L"</li>", fp);
-					}
+				{
+					fputws(L"\n<li> ", fp);
+					fputws(sv.Sothich[i], fp);
+					fputws(L"</li>", fp);
+				}
 				break;
 			}
 			case 11:
@@ -285,7 +285,7 @@ int main()
 	wchar_t s[20];
 	int sosv;
 	int *soSothich = NULL;
-	_wfopen_s(&fp, L"checklist1.txt", L"r+,ccs=UTF-8");
+	_wfopen_s(&fp, L"checklist1.csv", L"r+,ccs=UTF-8");
 	fopen_s(&fpin, "sinhvien.htm", "r,ccs=UTF-8");
 
 	if (!fp || !fpin)
@@ -293,20 +293,20 @@ int main()
 	else
 	{
 		DocAllFile(fp, sv, sosv, soSothich);
-		
+
 		XuatSV(sv, sosv, soSothich);
-		
+
 	}
 	for (int i = 0; i < sosv; i++)
 	{
 		wcscpy_s(s, sv[i].MSSV);
 		wcscat_s(s, L".htm");
-		_wfopen_s(&fpout, s	, L"w+,ccs=UTF-8");
+		_wfopen_s(&fpout, s, L"w+,ccs=UTF-8");
 		if (fpout != NULL)
 		{
 			SaoChepFile(fpin, fpout);
 			rewind(fpout);
-			SuaFile(fpout, sv[i],soSothich[i]);
+			SuaFile(fpout, sv[i], soSothich[i]);
 			fclose(fpout);
 			rewind(fpin);
 		}
@@ -315,7 +315,7 @@ int main()
 
 	fclose(fp);
 	fclose(fpin);
-	
+
 	return 0;
 
 }
